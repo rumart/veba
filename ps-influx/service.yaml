@@ -1,0 +1,21 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: kn-ps-influx
+  labels:
+    app: veba-ui
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/maxScale: "1"
+        autoscaling.knative.dev/minScale: "1"
+    spec:
+      containers:
+        - image: harbor.rhmlab.local/veba/kn-ps-influx:0.1.25
+          envFrom:
+            - secretRef:
+                name: influx-secret
+          env:
+            - name: FUNCTION_DEBUG
+              value: "true"
